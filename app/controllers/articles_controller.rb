@@ -1,7 +1,7 @@
 class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
-  # before_filter :capitalize_article_titles, :only => [:index]
+  before_filter :capitalize_article_titles, :only => [:index]
 
 
 
@@ -85,14 +85,14 @@ class ArticlesController < ApplicationController
     end
   end
 
+
   private
 
   def capitalize_article_titles
     @articles = Article.all
-    @articles.each do |article|
+    @articles.map do |article|
       article.title.upcase!
     end
-
   end
 
 end

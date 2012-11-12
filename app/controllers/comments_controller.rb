@@ -1,9 +1,12 @@
 class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
+
+  before_filter :replace_sad_with_happy, :only => [:create]
+
   def create
     @article = Article.find(params[:article_id])
-    @comment = @article.comments.build(params[:comment])
+    # @comment = @article.comments.build(params[:comment])
 
     respond_to do |format|
       if @comment.save
@@ -26,5 +29,19 @@ class CommentsController < ApplicationController
       format.html { redirect_to @comment.article }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def replace_sad_with_happy
+      @article = Article.find(params[:article_id])
+      @comment = @article.comments.build(params[:comment])
+      comment_string = @comment.body
+      comment_array = comment_string.split(" ")
+      while comment_array.include?("sad")
+        index = comment_array.index("sad")
+        comment_array[index] = "happy"
+      end
+      @comment.body = comment_array.join(" ")
+      @comment
   end
 end
