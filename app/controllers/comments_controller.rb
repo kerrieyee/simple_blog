@@ -3,9 +3,11 @@ class CommentsController < ApplicationController
   # POST /comments.json
 
   before_filter :replace_sad_with_happy, :only => [:create]
+  skip_before_filter :load_article, :only => [:destroy]
+  #need to do this in order to be able to destroy comments if not :id will equal the article id and not the comment id
 
   def create
-    @article = Article.find(params[:article_id])
+    # @article = Article.find(params[:article_id])
     # @comment = @article.comments.build(params[:comment])
 
     respond_to do |format|
@@ -22,6 +24,7 @@ class CommentsController < ApplicationController
   # DELETE /comments/1
   # DELETE /comments/1.json
   def destroy
+    # @article = Article.find(params[:article_id])
     @comment = Comment.find(params[:id])
     @comment.destroy
 
