@@ -1,17 +1,17 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter do 
-
-  	@upcase_titles = @article.title.upcase
-  end
-
+  before_filter :load_article, :capitalize_article_titles
   private
 
-  def load_article 
-  	@article = Article.find(params[:id]) if params[:id]
+  def load_article
+    @articles = Article.find(params[:id]) if params[:id]
   end
 
-  def upcase_article_titles
-  	@article.title = @article.title.capitalize
+  def capitalize_article_titles
+    @articles = Article.all
+    @articles.map do |article|
+      article.title.upcase!
+    end
   end
+
 end
